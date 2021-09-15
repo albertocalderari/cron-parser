@@ -1,6 +1,6 @@
 import argparse
 
-from marshmallow import ValidationError
+from marshmallow.exceptions import ValidationError
 
 from models.cron import Cron
 from models.exceptions import InvalidCron
@@ -11,11 +11,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("cron_expr")
     args = parser.parse_args()
+    error = ""
     try:
         cron = app(args.cron_expr)
         print(cron)
     except ValidationError as e:
-        raise InvalidCron(e.messages)
+        error += "Errors:\n"
+        for k, v in e.messages.items():
+            error += f"Location: {k} Errors: {','.join(v)}\n"
+    if error:
+        raise InvalidCron(error)
 
 
 def app(cron: str) -> Cron:
