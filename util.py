@@ -1,3 +1,7 @@
+from typing import Dict
+
+from models.exceptions import BadFormat
+
 _DOW_TO_INT_MAP = {
     "mon": "1",
     "tue": "2",
@@ -15,3 +19,18 @@ def dow_str_to_int(dow_str: str) -> str:
         lowered = lowered.replace(k, v)
 
     return lowered
+
+
+def cron_to_dict(data: str) -> Dict[str, str]:
+    try:
+        minute, hour, dom, month, dow, command = data.split(" ")
+        return dict(
+            minute=minute,
+            hour=hour,
+            dom=dom,
+            month=month,
+            dow=dow_str_to_int(dow),
+            command=command
+        )
+    except ValueError:
+        raise BadFormat(f"Cron {data} is not is a valid cron format")

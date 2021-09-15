@@ -3,7 +3,7 @@ import re
 import typing
 from marshmallow import ValidationError, fields
 
-from models import Range, Single
+from models.cron_values import Range, Single
 
 
 class CronField(fields.Field):

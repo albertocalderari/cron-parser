@@ -1,7 +1,7 @@
 import pytest
 from marshmallow import Schema, ValidationError
 
-from custom_types import CronField
+from custom_marshmallow_types import CronField
 from models import Single, Range
 
 valid_cases = [
