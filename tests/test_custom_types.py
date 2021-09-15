@@ -2,7 +2,7 @@ import pytest
 from marshmallow import Schema, ValidationError
 
 from custom_types import CronField
-from models import Single, Always, Range
+from models import Single, Range
 
 valid_cases = [
     ("1-2", Range(1, 2)),
@@ -11,7 +11,7 @@ valid_cases = [
     ("50/2", Range(50, 52, 54, 56, 58)),
     ("*/30", Range(0, 30)),
     ("1,2,4,4,6,5", Range(1, 2, 4, 5, 6)),
-    ("*", Always()),
+    ("*", Range(*range(0, 60))),
     ("5", Single(5)),
     ("15", Single(15))
 ]
@@ -41,7 +41,7 @@ def test_custom_cron_valid(value, expected):
 dow_valid_cases = [
     ("1-2", Range(1, 2)),
     ("1,2,3", Range(1, 2, 3)),
-    ("*", Always()),
+    ("*", Range(*range(0, 7))),
     ("5", Single(5)),
     ("6/6", Range(6, ))
 ]

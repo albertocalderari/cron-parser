@@ -3,7 +3,7 @@ import re
 import typing
 from marshmallow import ValidationError, fields
 
-from models import Always, Range, Single
+from models import Range, Single
 
 
 class CronField(fields.Field):
@@ -29,7 +29,7 @@ class CronField(fields.Field):
             **kwargs
     ):
         if value == self.wildcard:
-            return Always()
+            return Range(*range(self.min_range, self.max_range+1))
         elif '-' in value:
             return self._deserialize_range(value)
         elif '/' in value:
@@ -48,7 +48,7 @@ class CronField(fields.Field):
                 raise ValidationError(f"Lower bound value {lower} needs to be smaller than upper bound value {upper}")
             elif int_upper > self.max_range or int_lower < self.min_range:
                 raise ValidationError(f"Range {lower}-{upper} must be within {self.min_range}-{self.max_range}")
-            rng = list(range(int_lower, int_upper + 1))
+            rng = range(int_lower, int_upper + 1)
             return Range(*rng)
         else:
             raise ValidationError(f"Range value {value} des not match [v1-v2] "
@@ -62,7 +62,7 @@ class CronField(fields.Field):
             int_lower, int_step = int(lower), int(step)
             if int_step > self.max_range:
                 raise ValidationError(f"Step needs to be smaller than {self.max_range}")
-            rng = list(range(int_lower, self.max_range + 1, int_step))
+            rng = range(int_lower, self.max_range + 1, int_step)
             return Range(*rng)
         else:
             raise ValidationError(f"Range value {value} des not match [v1/v2] where"

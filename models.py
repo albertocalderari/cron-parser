@@ -1,14 +1,14 @@
 from abc import ABC
 from dataclasses import field
+from typing import Dict
 
+from marshmallow import pre_load
 from marshmallow_dataclass import dataclass
+
+from util import dow_str_to_int
 
 
 class CronValue(ABC):
-    pass
-
-
-class Always(CronValue):
     pass
 
 
@@ -48,3 +48,25 @@ class Cron:
     month: CronValue = field()
     dow: CronValue = field()
     command: str
+
+    @pre_load
+    def _split_fields_and_sanitize_schema(self, data: str, **kwargs) -> Dict[str, str]:
+        try:
+            minute, hour, dom, month, dow, command = data.split(" ")
+            return dict(
+                minute=minute,
+                hour=hour,
+                dom=dom,
+                month=month,
+                dow=dow_str_to_int(dow),
+                command=command
+            )
+        except ValueError:
+            raise BadFormat(f"Cron {data} is not is a valid cron format")
+
+    def __repr__(self):
+        return "minute: "
+
+
+class BadFormat(Exception):
+    pass
