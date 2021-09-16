@@ -12,7 +12,7 @@ def test_success():
         hour=Single(0),
         dom=Range(1, 15),
         month=Range(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-        dow=Range(1, 2, 3, 4, 5, 6),
+        dow=Range(1, 2, 3, 4, 5),
         command="/usr/bin/find"
     )
 
@@ -20,10 +20,10 @@ def test_success():
                    "hour:         0\n" \
                    "day of month: 1 15\n" \
                    "month:        1 2 3 4 5 6 7 8 9 10 11 12\n" \
-                   "day of week:  1 2 3 4 5 6\n" \
+                   "day of week:  1 2 3 4 5\n" \
                    "command:      /usr/bin/find\n"
 
-    cron_str = "*/15 0 1,15 * 1-6 /usr/bin/find"
+    cron_str = "*/15 0 1,15 * 1-5 /usr/bin/find"
     actual = app(cron_str)
 
     assert expected == actual, "Cron object not matching expected"
