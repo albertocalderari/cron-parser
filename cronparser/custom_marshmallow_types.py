@@ -1,6 +1,6 @@
 import re
-
 import typing
+
 from marshmallow import ValidationError, fields
 
 from cronparser.models.cron_values import Range, Single
@@ -29,7 +29,7 @@ class CronField(fields.Field):
             **kwargs
     ):
         if value == self.wildcard:
-            return Range(*range(self.min_range, self.max_range+1))
+            return Range(*range(self.min_range, self.max_range + 1))
         elif '-' in value:
             return self._deserialize_range(value)
         elif '/' in value:

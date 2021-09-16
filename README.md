@@ -1,31 +1,35 @@
 ## cronparser
-A Crontab Parser. The parser requires python 3.8 or later.
-Allowed syntax:
+
+A Crontab Parser. The parser requires python 3.8 or later. Allowed syntax:
 
 Hour,minute,month and day of the month:
- - \*
- - \*/3
- - 10-13
- - 11,22,45
-   
+
+- \*
+- \*/3
+- 10-13
+- 11,22,45
+
 Day of the week (0=sunday):
- - 1,2,3
- - 1-5
- - MON-TUE
- - mon,tue
- - 1/3
- - 1/wed
+
+- 1,2,3
+- 1-5
+- MON-TUE
+- mon,tue
+- 1/3
+- 1/wed
 
 ### installation
+
 Install the package from the repo:
 
 `pip3 install git+https://github.com/albertocalderari/cron-parser`
 
-###Usage
+### Usage
 
 Command: `cronparser -h`
 
 Output:
+
 ```
 usage: cronparser [-h] cron_expr
 
@@ -41,6 +45,7 @@ optional arguments:
 Command: `cronparser  "5 1 * * 1 /bin/sh"`
 
 Output:
+
 ```
 minute:       5
 hour:         1
@@ -53,6 +58,7 @@ command:      /bin/sh
 Command: `cronparser  "65 1 * * 1 /bin/sh"`
 
 Output:
+
 ```
 Traceback (most recent call last):
   File "/Users/alberto/venvs/cron-parser/bin/cronparser", line 33, in <module>
@@ -63,7 +69,7 @@ cronparser.models.exceptions.InvalidCron: Errors:
 Location: minute Errors: Value must be within 0 and 59
 ```
 
-###limitations
+### limitations
 
 - Currently, we do not support commands with spaces.
 - The crontab elements need to be separated with exactly one space
