@@ -19,7 +19,7 @@ Day of the week (0=sunday):
 ### installation
 Install the package from the repo:
 
-`pip3 install https://github.com/albertocalderari/cron-parser`
+`pip3 install git+https://github.com/albertocalderari/cron-parser`
 
 ###Usage
 
