@@ -1,6 +1,6 @@
 ## cronparser
 
-A Crontab Parser. The parser requires python 3.8 or later. Allowed syntax:
+A Crontab Parser. The parser requires python [3.8 or later](https://www.python.org/downloads/macos/). Allowed syntax:
 
 Hour,minute,month and day of the month:
 
