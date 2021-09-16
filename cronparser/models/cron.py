@@ -3,8 +3,8 @@ from dataclasses import field
 from marshmallow import fields
 from marshmallow_dataclass import dataclass
 
-from custom_marshmallow_types import CronField
-from models.cron_values import cron_value_to_string, CronValue
+from cronparser.custom_marshmallow_types import CronField
+from cronparser.models.cron_values import cron_value_to_string, CronValue
 
 
 @dataclass

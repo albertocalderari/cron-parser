@@ -2,14 +2,14 @@ import argparse
 
 from marshmallow.exceptions import ValidationError
 
-from models.cron import Cron
-from models.exceptions import InvalidCron
-from util import cron_to_dict
+from cronparser.models.cron import Cron
+from cronparser.models.exceptions import InvalidCron
+from cronparser.util import cron_to_dict
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("cron_expr")
+    parser = argparse.ArgumentParser("cronparser", description="A CLI to parse a cron command")
+    parser.add_argument("cron_expr", help='The cron expression in quotes i.e. */30 0 1,15 * 1-3')
     args = parser.parse_args()
     error = ""
     try:

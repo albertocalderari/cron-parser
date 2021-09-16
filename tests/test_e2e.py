@@ -1,9 +1,9 @@
 import pytest
 from marshmallow import ValidationError
 
-from main import app
-from models.cron import Cron
-from models.cron_values import Range, Single
+from cronparser.main import app
+from cronparser.models.cron import Cron
+from cronparser.models.cron_values import Range, Single
 
 
 def test_success():

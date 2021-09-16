@@ -1,6 +1,6 @@
 from typing import Dict
 
-from models.exceptions import BadFormat
+from cronparser.models.exceptions import BadFormat
 
 _DOW_TO_INT_MAP = {
     "mon": "1",

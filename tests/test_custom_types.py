@@ -1,8 +1,8 @@
 import pytest
 from marshmallow import Schema, ValidationError
 
-from custom_marshmallow_types import CronField
-from models import Single, Range
+from cronparser.custom_marshmallow_types import CronField
+from cronparser.models.cron_values import Range, Single
 
 valid_cases = [
     ("1-2", Range(1, 2)),
