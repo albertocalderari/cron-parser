@@ -15,7 +15,7 @@ class CronField(fields.Field):
 
         self._single_rgx = r'^[0-9]+$'
         self._range_rgx = r'^[0-9]+-[0-9]+$'
-        self._stepped_range_rgx = rf'^([0-9]+|\{self.wildcard})/[0-9]+$'
+        self._stepped_rgx = rf'^([0-9]+|\{self.wildcard})/[0-9]+$'
         self._list_rgx = r'^[0-9]+(?:,[0-9]+)*$'
 
     def _repr_args(self) -> str:
@@ -30,14 +30,28 @@ class CronField(fields.Field):
     ):
         if value == self.wildcard:
             return Range(*range(self.min_range, self.max_range + 1))
+        elif '-' in value and "/" in value:
+            return self._deserialize_stepped_range(value)
         elif '-' in value:
             return self._deserialize_range(value)
         elif '/' in value:
-            return self._deserialize_stepped_range(value)
+            return self._deserialize_stepped(value)
         elif ',' in value:
             return self._deserialize_list(value)
         else:
             return self._deserialize_single(value)
+
+    def _deserialize_stepped_range(self, value):
+        range_cron, step_value = value.split("/")
+        full_rng = self._deserialize_range(range_cron)
+        try:
+            int_step = int(step_value)
+        except ValueError as e:
+            raise ValidationError(f"Invalid step syntax for {value}")
+        start = min(full_rng.values)
+        end = max(full_rng.values) + 1
+        rng = range(start, end, int_step)
+        return Range(*rng)
 
     def _deserialize_range(self, value: str):
         rgx = self._range_rgx
@@ -54,8 +68,8 @@ class CronField(fields.Field):
             raise ValidationError(f"Range value {value} des not match [v1-v2] "
                                   f"where v1 <= v2 and values are within {self.min_range} and {self.max_range}")
 
-    def _deserialize_stepped_range(self, value: str):
-        rgx = self._stepped_range_rgx
+    def _deserialize_stepped(self, value: str):
+        rgx = self._stepped_rgx
         if re.fullmatch(rgx, value):
             value = value.replace(self.wildcard, "0")
             lower, step = value.split("/")
