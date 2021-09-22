@@ -30,6 +30,8 @@ class CronField(fields.Field):
     ):
         if value == self.wildcard:
             return Range(*range(self.min_range, self.max_range + 1))
+        elif "," in value and ('-' in value or "/" in value):
+            return self._deserialize_magic_value(value)
         elif '-' in value and "/" in value:
             return self._deserialize_stepped_range(value)
         elif '-' in value:
@@ -40,6 +42,19 @@ class CronField(fields.Field):
             return self._deserialize_list(value)
         else:
             return self._deserialize_single(value)
+
+    def _deserialize_magic_value(self, value):
+        values = value.split(",")
+        rngs = [self.deserialize(v) for v in values]
+        acc = []
+        for single_or_range in rngs:
+            if isinstance(single_or_range, Range):
+                acc.extend(single_or_range.values)
+            elif isinstance(single_or_range, Single):
+                acc.append(single_or_range.value)
+            else:
+                raise NotImplementedError(f"Value not supported {single_or_range}")
+        return Range(*acc)
 
     def _deserialize_stepped_range(self, value):
         range_cron, step_value = value.split("/")
